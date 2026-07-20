@@ -1,0 +1,18 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#expenseContainer {
+    width: 350px;
+    margin: auto;
+}
+
+input,
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+}
