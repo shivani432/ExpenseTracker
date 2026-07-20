@@ -1,53 +1,129 @@
+// ==============================
+// DOM Elements
+// ==============================
+
 const expenseName = document.getElementById("expenseName");
 const expenseAmount = document.getElementById("expenseAmount");
 const addBtn = document.getElementById("addBtn");
 const expenseList = document.getElementById("expenseList");
 const total = document.getElementById("total");
 
+// ==============================
+// Variables
+// ==============================
+
+let expenses = [];
 let totalAmount = 0;
 
-addBtn.addEventListener("click", function () {
+// ==============================
+// Save Data to Local Storage
+// ==============================
 
-    const name = expenseName.value;
+function saveToLocalStorage() {
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+}
+
+// ==============================
+// Load Data from Local Storage
+// ==============================
+
+function loadExpenses() {
+
+    const savedData = localStorage.getItem("expenses");
+
+    if (savedData !== null) {
+        expenses = JSON.parse(savedData);
+    }
+
+}
+
+// ==============================
+// Render Expenses
+// ==============================
+
+function renderExpenses() {
+
+    expenseList.innerHTML = "";
+    totalAmount = 0;
+
+    expenses.forEach(function (expense, index) {
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            ${expense.name} - ₹${expense.amount}
+            <button onclick="deleteExpense(${index})">
+                Delete
+            </button>
+        `;
+
+        expenseList.appendChild(li);
+
+        totalAmount += expense.amount;
+
+    });
+
+    total.textContent = totalAmount;
+
+}
+
+// ==============================
+// Add Expense
+// ==============================
+
+function addExpense() {
+
+    const name = expenseName.value.trim();
     const amount = Number(expenseAmount.value);
 
     if (name === "" || amount <= 0) {
-        alert("Please enter valid expense.");
+        alert("Please enter valid expense and amount.");
         return;
     }
 
-   const li = document.createElement("li");
+    const expense = {
+        name: name,
+        amount: amount
+    };
 
-const deleteBtn = document.createElement("button");
+    expenses.push(expense);
 
-deleteBtn.textContent = "Delete";
+    saveToLocalStorage();
 
-li.textContent = `${name} - ₹${amount} `;
-
-li.appendChild(deleteBtn);
-
-//**** */
-deleteBtn.addEventListener("click", function () {
-
-    totalAmount -= amount;
-
-    total.textContent = totalAmount;
-
-    li.remove();
-
-});
-
-    expenseList.appendChild(li);
-    localStorage.setItem("expenses", expenseList.innerHTML);
-
-    totalAmount += amount;
-    total.textContent = totalAmount;
+    renderExpenses();
 
     expenseName.value = "";
     expenseAmount.value = "";
+}
+
+// ==============================
+// Delete Expense
+// ==============================
+
+function deleteExpense(index) {
+
+    expenses.splice(index, 1);
+
+    saveToLocalStorage();
+
+    renderExpenses();
+
+}
+
+// ==============================
+// Add Button Event
+// ==============================
+
+addBtn.addEventListener("click", function () {
+
+    addExpense();
 
 });
 
-window.onload = function () {
-    expenseList.innerHTML = localStorage.getItem("expenses") || "";
-};
+// ==============================
+// Initial Load
+// ==============================
+
+loadExpenses();
+
+renderExpenses();
