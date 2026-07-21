@@ -1,32 +1,21 @@
-// ==============================
-// DOM Elements
-// ==============================
-
 const expenseName = document.getElementById("expenseName");
 const expenseAmount = document.getElementById("expenseAmount");
 const addBtn = document.getElementById("addBtn");
 const expenseList = document.getElementById("expenseList");
 const total = document.getElementById("total");
 
-// ==============================
-// Variables
-// ==============================
-
 let expenses = [];
 let totalAmount = 0;
 
-// ==============================
-// Save Data to Local Storage
-// ==============================
+// Store the index of the expense being edited
+let editIndex = -1;
 
+// Save data to Local Storage
 function saveToLocalStorage() {
     localStorage.setItem("expenses", JSON.stringify(expenses));
 }
 
-// ==============================
-// Load Data from Local Storage
-// ==============================
-
+// Load data from Local Storage
 function loadExpenses() {
 
     const savedData = localStorage.getItem("expenses");
@@ -37,10 +26,7 @@ function loadExpenses() {
 
 }
 
-// ==============================
-// Render Expenses
-// ==============================
-
+// Render all expenses
 function renderExpenses() {
 
     expenseList.innerHTML = "";
@@ -52,6 +38,11 @@ function renderExpenses() {
 
         li.innerHTML = `
             ${expense.name} - ₹${expense.amount}
+
+            <button onclick="editExpense(${index})">
+                Edit
+            </button>
+
             <button onclick="deleteExpense(${index})">
                 Delete
             </button>
@@ -67,10 +58,7 @@ function renderExpenses() {
 
 }
 
-// ==============================
 // Add Expense
-// ==============================
-
 function addExpense() {
 
     const name = expenseName.value.trim();
@@ -86,20 +74,57 @@ function addExpense() {
         amount: amount
     };
 
-    expenses.push(expense);
+    
 
+    // Add New Expense
+    if (editIndex === -1) {
+
+        expenses.push(expense);
+
+    } else {
+
+        // Update Existing Expense
+        expenses[editIndex] = expense;
+
+        // Exit Edit Mode
+        editIndex = -1;
+
+        // Change button text
+        addBtn.textContent = "Add Expense";
+
+    }
+
+    // Save Updated Data
     saveToLocalStorage();
 
-    renderExpenses();
-
+    // Clear Input Fields
     expenseName.value = "";
     expenseAmount.value = "";
+
+    // Refresh UI
+    renderExpenses();
+
 }
 
-// ==============================
-// Delete Expense
-// ==============================
+// Edit Expense
+function editExpense(index) {
 
+    // Get Selected Expense
+    const expense = expenses[index];
+
+    // Fill Input Fields
+    expenseName.value = expense.name;
+    expenseAmount.value = expense.amount;
+
+    // Store Editing Index
+    editIndex = index;
+
+    // Change Button Text
+    addBtn.textContent = "Update Expense";
+
+}
+
+// Delete Expense
 function deleteExpense(index) {
 
     expenses.splice(index, 1);
@@ -110,20 +135,14 @@ function deleteExpense(index) {
 
 }
 
-// ==============================
 // Add Button Event
-// ==============================
-
 addBtn.addEventListener("click", function () {
 
     addExpense();
 
 });
 
-// ==============================
 // Initial Load
-// ==============================
-
 loadExpenses();
 
 renderExpenses();
