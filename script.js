@@ -5,6 +5,10 @@ const expenseList = document.getElementById("expenseList");
 const total = document.getElementById("total");
 // Search Input
 const searchExpense = document.getElementById("searchExpense");
+// Category
+const expenseCategory = document.getElementById("expenseCategory");
+// Date
+const expenseDate = document.getElementById("expenseDate");
 
 let expenses = [];
 let totalAmount = 0;
@@ -54,17 +58,21 @@ filteredExpenses.forEach(function(expense, index){
 
     const li = document.createElement("li");
 
-    li.innerHTML = `
-        ${expense.name} - ₹${expense.amount}
+   li.innerHTML = `
+    <strong>${expense.name}</strong> - ₹${expense.amount}<br>
 
-        <button onclick="editExpense(${expenses.indexOf(expense)})">
-            Edit
-        </button>
+    📂 Category : ${expense.category}<br>
 
-        <button onclick="deleteExpense(${expenses.indexOf(expense)})">
-            Delete
-        </button>
-    `;
+    📅 Date : ${expense.date}<br><br>
+
+    <button onclick="editExpense(${expenses.indexOf(expense)})">
+        Edit
+    </button>
+
+    <button onclick="deleteExpense(${expenses.indexOf(expense)})">
+        Delete
+    </button>
+`;
 
     expenseList.appendChild(li);
 
@@ -79,16 +87,27 @@ function addExpense() {
 
     const name = expenseName.value.trim();
     const amount = Number(expenseAmount.value);
+    // Get Category
+    const category = expenseCategory.value;
 
-    if (name === "" || amount <= 0) {
-        alert("Please enter valid expense and amount.");
-        return;
-    }
+    // Get Date
+    const date = expenseDate.value;
 
-    const expense = {
-        name: name,
-        amount: amount
-    };
+    if (
+    name === "" ||
+    amount <= 0 ||
+    date === ""
+) {
+    alert("Please fill all fields.");
+    return;
+}
+
+   const expense = {
+    name: name,
+    amount: amount,
+    category: category,
+    date: date
+};
 
     
 
@@ -116,6 +135,8 @@ function addExpense() {
     // Clear Input Fields
     expenseName.value = "";
     expenseAmount.value = "";
+    expenseCategory.value = "";
+    expenseDate.value = "";
 
     // Refresh UI
     renderExpenses();
