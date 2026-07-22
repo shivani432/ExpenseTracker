@@ -3,6 +3,8 @@ const expenseAmount = document.getElementById("expenseAmount");
 const addBtn = document.getElementById("addBtn");
 const expenseList = document.getElementById("expenseList");
 const total = document.getElementById("total");
+// Search Input
+const searchExpense = document.getElementById("searchExpense");
 
 let expenses = [];
 let totalAmount = 0;
@@ -26,33 +28,47 @@ function loadExpenses() {
 
 }
 
+
 // Render all expenses
 function renderExpenses() {
 
     expenseList.innerHTML = "";
     totalAmount = 0;
 
-    expenses.forEach(function (expense, index) {
+    // Get Search Text
+    const searchText = searchExpense.value.toLowerCase();
 
-        const li = document.createElement("li");
+  // Filter Expenses
+const filteredExpenses = expenses.filter(function(expense){
 
-        li.innerHTML = `
-            ${expense.name} - ₹${expense.amount}
+    return expense.name
+        .toLowerCase()
+        .includes(searchText);
 
-            <button onclick="editExpense(${index})">
-                Edit
-            </button>
+});
 
-            <button onclick="deleteExpense(${index})">
-                Delete
-            </button>
-        `;
+// Display Filtered Expenses
+filteredExpenses.forEach(function(expense, index){
 
-        expenseList.appendChild(li);
+    totalAmount += expense.amount;
 
-        totalAmount += expense.amount;
+    const li = document.createElement("li");
 
-    });
+    li.innerHTML = `
+        ${expense.name} - ₹${expense.amount}
+
+        <button onclick="editExpense(${expenses.indexOf(expense)})">
+            Edit
+        </button>
+
+        <button onclick="deleteExpense(${expenses.indexOf(expense)})">
+            Delete
+        </button>
+    `;
+
+    expenseList.appendChild(li);
+
+});
 
     total.textContent = totalAmount;
 
@@ -146,3 +162,7 @@ addBtn.addEventListener("click", function () {
 loadExpenses();
 
 renderExpenses();
+
+searchExpense.addEventListener("input", function () {
+    renderExpenses();
+});
