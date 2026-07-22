@@ -18,6 +18,15 @@
 
     <input type="number" id="expenseAmount" placeholder="Enter amount">
 
+ <!-- Transaction Type -->
+<select id="transactionType">
+
+    <option value="Expense">Expense</option>
+
+    <option value="Income">Income</option>
+
+</select>   
+
 
 <input
     type="text"
@@ -25,10 +34,14 @@
     placeholder="Enter Category">
 
 <input
-    type="date"
+    type="date"git 
     id="expenseDate">
 
-    <button id="addBtn">Add Expense</button>
+<h3>💰 Income : ₹<span id="totalIncome">0</span></h3>
+
+<h3>💸 Expense : ₹<span id="totalExpense">0</span></h3>
+
+<h3>🏦 Balance : ₹<span id="balance">0</span></h3>
 
     <!-- Search Expense -->
 <input

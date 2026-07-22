@@ -2,13 +2,23 @@ const expenseName = document.getElementById("expenseName");
 const expenseAmount = document.getElementById("expenseAmount");
 const addBtn = document.getElementById("addBtn");
 const expenseList = document.getElementById("expenseList");
-const total = document.getElementById("total");
+
+// Income, Expense, Balance
+const totalIncomeElement = document.getElementById("totalIncome");
+const totalExpenseElement = document.getElementById("totalExpense");
+const balanceElement = document.getElementById("balance");
+
 // Search Input
 const searchExpense = document.getElementById("searchExpense");
+
 // Category
 const expenseCategory = document.getElementById("expenseCategory");
+
 // Date
 const expenseDate = document.getElementById("expenseDate");
+
+// Transaction Type
+const transactionType = document.getElementById("transactionType");
 
 let expenses = [];
 let totalAmount = 0;
@@ -37,13 +47,18 @@ function loadExpenses() {
 function renderExpenses() {
 
     expenseList.innerHTML = "";
-    totalAmount = 0;
 
     // Get Search Text
     const searchText = searchExpense.value.toLowerCase();
 
+   
+     let totalIncome = 0;
+    let totalExpense = 0;
+    let balance = 0;
+
+    
   // Filter Expenses
-const filteredExpenses = expenses.filter(function(expense){
+   const filteredExpenses = expenses.filter(function(expense){
 
     return expense.name
         .toLowerCase()
@@ -54,16 +69,38 @@ const filteredExpenses = expenses.filter(function(expense){
 // Display Filtered Expenses
 filteredExpenses.forEach(function(expense, index){
 
-    totalAmount += expense.amount;
+   if (expense.type === "Income") {
+
+    totalIncome += expense.amount;
+
+} else {
+
+    totalExpense += expense.amount;
+
+}
+
+balance = totalIncome - totalExpense;
 
     const li = document.createElement("li");
 
-   li.innerHTML = `
-    <strong>${expense.name}</strong> - ₹${expense.amount}<br>
+li.innerHTML = `
+    <strong>${expense.name}</strong>
 
-    📂 Category : ${expense.category}<br>
+    <br>
 
-    📅 Date : ${expense.date}<br><br>
+    ${expense.type === "Income" ? "🟢 Income" : "🔴 Expense"}
+
+    - ₹${expense.amount}
+
+    <br>
+
+    📂 Category : ${expense.category}
+
+    <br>
+
+    📅 Date : ${expense.date}
+
+    <br><br>
 
     <button onclick="editExpense(${expenses.indexOf(expense)})">
         Edit
@@ -78,7 +115,11 @@ filteredExpenses.forEach(function(expense, index){
 
 });
 
-    total.textContent = totalAmount;
+totalIncomeElement.textContent = totalIncome;
+
+totalExpenseElement.textContent = totalExpense;
+
+balanceElement.textContent = balance;
 
 }
 
@@ -92,6 +133,8 @@ function addExpense() {
 
     // Get Date
     const date = expenseDate.value;
+    // Get Transaction Type
+    const type = transactionType.value;
 
     if (
     name === "" ||
@@ -106,7 +149,8 @@ function addExpense() {
     name: name,
     amount: amount,
     category: category,
-    date: date
+    date: date,
+    type: type
 };
 
     
