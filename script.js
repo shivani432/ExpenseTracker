@@ -50,22 +50,26 @@ function renderExpenses() {
 
     // Get Search Text
     const searchText = searchExpense.value.toLowerCase();
-
+    const selectedType = filterType.value;
    
      let totalIncome = 0;
     let totalExpense = 0;
     let balance = 0;
 
     
-  // Filter Expenses
-   const filteredExpenses = expenses.filter(function(expense){
+  const filteredExpenses = expenses.filter(function(expense){
 
-    return expense.name
+    const matchesSearch = expense.name
         .toLowerCase()
         .includes(searchText);
 
-});
+    const matchesType =
+        selectedType === "All" ||
+        expense.type === selectedType;
 
+    return matchesSearch && matchesType;
+
+});
 // Display Filtered Expenses
 filteredExpenses.forEach(function(expense, index){
 
@@ -230,4 +234,10 @@ renderExpenses();
 
 searchExpense.addEventListener("input", function () {
     renderExpenses();
+});
+
+filterType.addEventListener("change", function () {
+
+    renderExpenses();
+
 });

@@ -28,14 +28,12 @@
 </select>   
 
 
-<input
-    type="text"
-    id="expenseCategory"
-    placeholder="Enter Category">
+<input type="text" id="expenseCategory" placeholder="Enter Category">
 
-<input
-    type="date"git 
-    id="expenseDate">
+<input type="date" id="expenseDate">
+
+<button id="addBtn">Add Expense</button>
+
 
 <h3>💰 Income : ₹<span id="totalIncome">0</span></h3>
 
@@ -44,14 +42,20 @@
 <h3>🏦 Balance : ₹<span id="balance">0</span></h3>
 
     <!-- Search Expense -->
-<input
-    type="text"
-    id="searchExpense"
-    placeholder="Search Expense">
+<input type="text" id="searchExpense" placeholder="Search Expense">
+<select id="filterType">
 
-    <h3>Total: ₹<span id="total">0</span></h3>
+    <option value="All">All</option>
 
-    <ul id="expenseList"></ul>
+    <option value="Income">Income</option>
+
+    <option value="Expense">Expense</option>
+
+</select>
+
+<h3>Total: ₹<span id="total">0</span></h3>
+
+<ul id="expenseList"></ul>
 
 </div>
 
