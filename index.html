@@ -36,15 +36,34 @@
 <button id="addBtn">Add Expense</button>
 
 
-<h3>💰 Income : ₹<span id="totalIncome">0</span></h3>
+<div class="dashboard">
 
-<h3>💸 Expense : ₹<span id="totalExpense">0</span></h3>
+    <div class="card">
+        <h3>💰 Income</h3>
+        <h2>₹<span id="totalIncome">0</span></h2>
+    </div>
 
-<h3>🏦 Balance : ₹<span id="balance">0</span></h3>
+    <div class="card">
+        <h3>💸 Expense</h3>
+        <h2>₹<span id="totalExpense">0</span></h2>
+    </div>
 
-<h3>📋 Total Transactions : <span id="transactionCount">0</span></h3>
+    <div class="card">
+        <h3>🏦 Balance</h3>
+        <h2>₹<span id="balance">0</span></h2>
+    </div>
 
-<h3>📊 Showing : <span id="showingCount">0</span></h3>
+    <div class="card">
+        <h3>📋 Transactions</h3>
+        <h2><span id="transactionCount">0</span></h2>
+    </div>
+
+    <div class="card">
+        <h3>📊 Showing</h3>
+        <h2><span id="showingCount">0</span></h2>
+    </div>
+
+</div>
 
     <!-- Search Expense -->
 <input type="text" id="searchExpense" placeholder="Search Expense">
