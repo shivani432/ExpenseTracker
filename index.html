@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
    
 </head>
+
 <body>
     
 
@@ -41,6 +42,10 @@
 
 <h3>🏦 Balance : ₹<span id="balance">0</span></h3>
 
+<h3>📋 Total Transactions : <span id="transactionCount">0</span></h3>
+
+<h3>📊 Showing : <span id="showingCount">0</span></h3>
+
     <!-- Search Expense -->
 <input type="text" id="searchExpense" placeholder="Search Expense">
 <select id="filterType">
@@ -57,10 +62,17 @@
 
 <ul id="expenseList"></ul>
 
+<!-- Expense Chart -->
+<canvas id="expenseChart"></canvas>
+
 </div>
 
     
 
-    <script src="script.js"></script>
+    <!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="script.js"></script>
+
 </body>
 </html>

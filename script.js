@@ -19,8 +19,17 @@ const expenseDate = document.getElementById("expenseDate");
 
 // Transaction Type
 const transactionType = document.getElementById("transactionType");
+const transactionCount = document.getElementById("transactionCount");
+const showingCount = document.getElementById("showingCount");
+// Expense Chart
+const expenseChart = document.getElementById("expenseChart");
+const filterType = document.getElementById("filterType");
 
 let expenses = [];
+
+// Chart Variable
+let chart;
+
 let totalAmount = 0;
 
 // Store the index of the expense being edited
@@ -125,7 +134,52 @@ totalExpenseElement.textContent = totalExpense;
 
 balanceElement.textContent = balance;
 
+// Update Chart
+updateChart(totalIncome, totalExpense);
+
+// Total Transactions
+transactionCount.textContent = expenses.length;
+
+// Currently Showing Transactions
+showingCount.textContent = filteredExpenses.length;
+
+} 
+
+// Create Expense Chart
+function updateChart(income, expense) {
+
+    // Remove Old Chart
+    if (chart) {
+        chart.destroy();
+    }
+
+    // Create New Chart
+    chart = new Chart(expenseChart, {
+
+        type: "pie",
+
+        data: {
+
+            labels: ["Income", "Expense"],
+
+            datasets: [{
+
+                data: [income, expense],
+
+                backgroundColor: [
+                    "green",
+                    "red"
+                ]
+
+            }]
+
+        }
+
+    });
+
 }
+
+
 
 // Add Expense
 function addExpense() {
