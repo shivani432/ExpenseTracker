@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shivani.expensetracker.entity.Expense;
+import com.shivani.expensetracker.exception.ResourceNotFoundException;
 import com.shivani.expensetracker.repository.ExpenseRepository;
 
 @Service
@@ -24,25 +25,28 @@ public class ExpenseService {
     return expenseRepository.findAll();
   }
     public Expense getExpenseById(Long id) {
-    return expenseRepository.findById(id).orElse(null);
+    return expenseRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Expense not found with id: " + id));
   }
     public Expense updateExpense(Long id, Expense updatedExpense) {
 
-    Expense expense = expenseRepository.findById(id).orElse(null);
-
-    if (expense != null) {
-        expense.setTitle(updatedExpense.getTitle());
+   Expense expense = expenseRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Expense not found with id: " + id));
+    
+        expense.setName(updatedExpense.getName());
+        expense.setType(updatedExpense.getType());
         expense.setAmount(updatedExpense.getAmount());
         expense.setCategory(updatedExpense.getCategory());
         expense.setDate(updatedExpense.getDate());
 
         return expenseRepository.save(expense);
-    }
-
-    return null;
+    
   }
     public void deleteExpense(Long id) {
-    expenseRepository.deleteById(id);
-  }
 
+    Expense expense = expenseRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Expense not found with id: " + id));
+
+    expenseRepository.delete(expense);
+}
 }

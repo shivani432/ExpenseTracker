@@ -1,11 +1,12 @@
 package com.shivani.expensetracker.entity;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Expense {
@@ -13,23 +14,32 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
 
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    @NotBlank(message = "Type is required")
+    private String type;
+
+    @NotNull(message = "Amount is required")
+    @Positive(message = "Amount must be greater than 0")
     private Double amount;
 
+    @NotBlank(message = "Category is required")
     private String category;
 
-    private LocalDate date;
-
+    @NotBlank(message = "Date is required")
+    private String date;
 
 public Expense() {
 }
 
-public Expense(String title, Double amount, String category, LocalDate date) {
-    this.title = title;
+public Expense(String name, Double amount, String category, String date, String type) {
+    this.name = name;
     this.amount = amount;
     this.category = category;
     this.date = date;
+    this.type = type;
 }
 
     public Long getId() {
@@ -40,12 +50,12 @@ public Expense(String title, Double amount, String category, LocalDate date) {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+    return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+public void setName(String name) {
+    this.name = name;
     }
 
     public Double getAmount() {
@@ -64,11 +74,18 @@ public Expense(String title, Double amount, String category, LocalDate date) {
         this.category = category;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
+   public String getDate() {
+    return date;
+}
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+public void setDate(String date) {
+    this.date = date;
+}
+    public String getType() {
+    return type;
+}
+
+public void setType(String type) {
+    this.type = type;
+}
 }
