@@ -1,6 +1,8 @@
 package com.shivani.expensetracker.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,5 +73,31 @@ public class ExpenseService {
             .orElseThrow(() -> new ResourceNotFoundException("Expense not found with id: " + id));
 
     expenseRepository.delete(expense);
+}
+public Object getExpenseSummary(Long userId) {
+    List<Expense> expenses = getExpensesByUser(userId);
+
+double totalIncome = 0;
+double totalExpense = 0;
+
+for (Expense expense : expenses) {
+
+    if (expense.getType().equalsIgnoreCase("Income")) {
+        totalIncome += expense.getAmount();
+    } else {
+        totalExpense += expense.getAmount();
+    }
+}
+
+double balance = totalIncome - totalExpense;
+
+Map<String, Object> summary = new HashMap<>();
+
+summary.put("totalIncome", totalIncome);
+summary.put("totalExpense", totalExpense);
+summary.put("balance", balance);
+summary.put("totalTransactions", expenses.size());
+
+return summary;
 }
 }
