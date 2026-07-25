@@ -15,6 +15,8 @@
 
     <h1>Expense Tracker</h1>
 
+    <button id="logoutBtn">Logout</button>
+
     <input type="text" id="expenseName" placeholder="Enter expense">
 
     <input type="number" id="expenseAmount" placeholder="Enter amount">
@@ -29,12 +31,26 @@
 </select>   
 
 
-<input type="text" id="expenseCategory" placeholder="Enter Category">
+<select id="expenseCategory">
+
+    <option value="Food">Food</option>
+
+    <option value="Travel">Travel</option>
+
+    <option value="Shopping">Shopping</option>
+
+    <option value="Bills">Bills</option>
+
+    <option value="Salary">Salary</option>
+
+    <option value="Other">Other</option>
+
+</select>
 
 <input type="date" id="expenseDate">
 
-<button id="addBtn">Add Expense</button>
-
+<button id="addBtn">Add Transaction</button>
+<button id="exportBtn">📥 Export CSV</button>
 
 <div class="dashboard">
 
@@ -67,6 +83,23 @@
 
     <!-- Search Expense -->
 <input type="text" id="searchExpense" placeholder="Search Expense">
+<select id="filterCategory">
+
+    <option value="All">All Categories</option>
+
+    <option value="Food">Food</option>
+
+    <option value="Travel">Travel</option>
+
+    <option value="Shopping">Shopping</option>
+
+    <option value="Bills">Bills</option>
+
+    <option value="Salary">Salary</option>
+
+    <option value="Other">Other</option>
+
+</select>
 <select id="filterType">
 
     <option value="All">All</option>

@@ -1,6 +1,13 @@
+const API_URL = "http://localhost:8080/expenses";
+const userId = localStorage.getItem("userId");
+
+if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "login.html";
+}
 const expenseName = document.getElementById("expenseName");
 const expenseAmount = document.getElementById("expenseAmount");
 const addBtn = document.getElementById("addBtn");
+const exportBtn = document.getElementById("exportBtn");
 const expenseList = document.getElementById("expenseList");
 
 // Income, Expense, Balance
@@ -24,6 +31,7 @@ const showingCount = document.getElementById("showingCount");
 // Expense Chart
 const expenseChart = document.getElementById("expenseChart");
 const filterType = document.getElementById("filterType");
+const logoutBtn = document.getElementById("logoutBtn");
 
 let expenses = [];
 
@@ -36,21 +44,28 @@ let totalAmount = 0;
 let editIndex = -1;
 
 // Save data to Local Storage
+// Old LocalStorage Function (Not Used Now)
 function saveToLocalStorage() {
     localStorage.setItem("expenses", JSON.stringify(expenses));
 }
 
-// Load data from Local Storage
-function loadExpenses() {
+async function loadExpenses() {
 
-    const savedData = localStorage.getItem("expenses");
+    const response = await fetch(API_URL + "/user/" + userId);
 
-    if (savedData !== null) {
-        expenses = JSON.parse(savedData);
-    }
+    expenses = await response.json();
+
+    const summaryResponse = await fetch(API_URL + "/user/" + userId + "/summary");
+    const summary = await summaryResponse.json();
+
+    document.getElementById("totalIncome").innerText = summary.totalIncome;
+    document.getElementById("totalExpense").innerText = summary.totalExpense;
+    document.getElementById("balance").innerText = summary.balance;
+    document.getElementById("transactionCount").innerText = summary.totalTransactions;
+
+    renderExpenses();
 
 }
-
 
 // Render all expenses
 function renderExpenses() {
@@ -60,8 +75,9 @@ function renderExpenses() {
     // Get Search Text
     const searchText = searchExpense.value.toLowerCase();
     const selectedType = filterType.value;
+    const selectedCategory = filterCategory.value;
    
-     let totalIncome = 0;
+    let totalIncome = 0;
     let totalExpense = 0;
     let balance = 0;
 
@@ -76,7 +92,11 @@ function renderExpenses() {
         selectedType === "All" ||
         expense.type === selectedType;
 
-    return matchesSearch && matchesType;
+    const matchesCategory =
+    selectedCategory === "All" ||
+    expense.category.toLowerCase() === selectedCategory.toLowerCase();
+
+    return matchesSearch && matchesType && matchesCategory;
 
 });
 // Display Filtered Expenses
@@ -182,7 +202,7 @@ function updateChart(income, expense) {
 
 
 // Add Expense
-function addExpense() {
+async function addExpense() {
 
     const name = expenseName.value.trim();
     const amount = Number(expenseAmount.value);
@@ -203,42 +223,50 @@ function addExpense() {
     return;
 }
 
-   const expense = {
+  const expense = {
     name: name,
     amount: amount,
     category: category,
     date: date,
-    type: type
+    type: type,
+    user: {
+    id: Number(userId)
+}
+
 };
 
-    
+    console.log(expense);
 
-    // Add New Expense
     if (editIndex === -1) {
 
-        expenses.push(expense);
+    await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(expense)
+    });
 
-    } else {
+} else {
 
-        // Update Existing Expense
-        expenses[editIndex] = expense;
+    await fetch(API_URL + "/" + expenses[editIndex].id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(expense)
+    });
 
-        // Exit Edit Mode
-        editIndex = -1;
-
-        // Change button text
-        addBtn.textContent = "Add Expense";
-
-    }
-
-    // Save Updated Data
-    saveToLocalStorage();
+    editIndex = -1;
+    addBtn.textContent = "Add Expense";
+}
 
     // Clear Input Fields
     expenseName.value = "";
     expenseAmount.value = "";
     expenseCategory.value = "";
     expenseDate.value = "";
+    await loadExpenses();
 
     // Refresh UI
     renderExpenses();
@@ -254,6 +282,9 @@ function editExpense(index) {
     // Fill Input Fields
     expenseName.value = expense.name;
     expenseAmount.value = expense.amount;
+    expenseCategory.value = expense.category;
+    expenseDate.value = expense.date;
+    transactionType.value = expense.type;
 
     // Store Editing Index
     editIndex = index;
@@ -263,14 +294,13 @@ function editExpense(index) {
 
 }
 
-// Delete Expense
-function deleteExpense(index) {
+async function deleteExpense(index) {
 
-    expenses.splice(index, 1);
+    await fetch(API_URL + "/" + expenses[index].id, {
+        method: "DELETE"
+    });
 
-    saveToLocalStorage();
-
-    renderExpenses();
+    await loadExpenses();
 
 }
 
@@ -281,11 +311,32 @@ addBtn.addEventListener("click", function () {
 
 });
 
+exportBtn.addEventListener("click", exportToCSV);
+
 // Initial Load
 loadExpenses();
 
-renderExpenses();
+function exportToCSV() {
 
+    let csv = "Name,Amount,Type,Category,Date\n";
+
+    expenses.forEach(expense => {
+        csv += `${expense.name},${expense.amount},${expense.type},${expense.category},${expense.date}\n`;
+    });
+
+    const blob = new Blob([csv], { type: "text/csv" });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "expenses.csv";
+
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+}
 searchExpense.addEventListener("input", function () {
     renderExpenses();
 });
@@ -293,5 +344,17 @@ searchExpense.addEventListener("input", function () {
 filterType.addEventListener("change", function () {
 
     renderExpenses();
+
+});
+
+filterCategory.addEventListener("change", function () {
+    renderExpenses();
+});
+
+logoutBtn.addEventListener("click", function () {
+
+    localStorage.removeItem("isLoggedIn");
+
+    window.location.href = "login.html";
 
 });
