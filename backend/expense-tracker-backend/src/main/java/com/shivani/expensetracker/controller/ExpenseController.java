@@ -36,6 +36,11 @@ public class ExpenseController {
         public List<Expense> getAllExpenses() {
         return expenseService.getAllExpenses();
     }
+
+        @GetMapping("/expenses/user/{userId}")
+        public List<Expense> getExpensesByUser(@PathVariable Long userId) {
+        return expenseService.getExpensesByUser(userId);
+    }
         @GetMapping("/expenses/{id}")
         public Expense getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id);
