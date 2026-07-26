@@ -41,3 +41,49 @@ Expense Tracker is a web application that helps users manage their daily income 
 - GitHub
 - Postman
 - VS Code
+
+## ⚙️ Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/shivani432/ExpenseTracker.git
+```
+
+2. Open the backend project in your IDE.
+
+3. Configure MySQL in `application.properties`.
+
+4. Run the Spring Boot application.
+
+5. Open the frontend (`index.html`) in your browser or using Live Server.
+
+---
+
+## 📂 Project Structure
+
+```
+ExpenseTracker/
+│
+├── backend/
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   ├── entity/
+│   └── ...
+│
+├── index.html
+├── script.js
+├── style.css
+├── login.html
+├── register.html
+└── README.md
+```
+
+---
+
+## 👩‍💻 Author
+
+**Shivani Kantak**
+
+Java Full Stack Developer (Fresher)8404198404
