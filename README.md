@@ -86,4 +86,11 @@ ExpenseTracker/
 
 **Shivani Kantak**
 
-Java Full Stack Developer (Fresher)8404198404
+Java Full Stack Developer (Fresher)
+  
+📧 Email: shivanikantak10@gmail.com
+
+🔗 GitHub: https://github.com/shivani432
+
+🔗 www.linkedin.com/in/shivani-d-kantak
+
