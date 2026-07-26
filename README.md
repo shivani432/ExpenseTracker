@@ -87,27 +87,35 @@ ExpenseTracker/
 
 ### Login Page
 
+
 ![Login](screenshots/login.png)
 
 
 ### Register Page
+
 
 ![Register](screenshots/register.png)
 
 
 ### Add Transaction
 
+
 ![Add Transaction](screenshots/add-transaction.png)
 
 
+
 ### Dashboard
+
 
 ![Dashboard](screenshots/dashboard.png)
 
 
 ### Expense Chart
 
+
 ![Chart](screenshots/chart.png)
+
+
 
 
 ## 👩‍💻 Author
